@@ -10,7 +10,7 @@ import time
 import sys
 import os
 # Auto-install libraries
-required_packages = ['pandas', 'python-dotenv', 'PyPDF2']
+required_packages = ['pandas', 'python-dotenv', 'PyPDF2','fpdf']
 for package in required_packages:
     try:
         __import__(package)
