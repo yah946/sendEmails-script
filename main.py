@@ -1,3 +1,4 @@
+from Attachment.motivation_letter_template import letter,string2pdf
 from Attachment.email_template import message,MESSAGE_SUBJECT
 from email.message import EmailMessage
 from pypdf.errors import PdfReadError
@@ -35,9 +36,10 @@ def greating(gender,rh,rh_name):
         base = "Madame"
     else:
         return "Monsieur, Madame,"
-    if rh == 1 and rh_name:
+    if rh_name:
         return f"{base} {rh_name},"
     return f"{base},"
+# Add Name of Company in the email and motivation letter
 def companyName(name):
     if(name):
         name = name.lower()
@@ -56,15 +58,15 @@ def add_attachment(path,msg):
         attach = f.read()
         file_name = os.path.basename(f.name)
         msg.add_attachment(attach,maintype='application',subtype='pdf',filename=file_name)
-# Put together the email (Subject, Body, and Attachment)
+# Put together in the email (Subject, Body, and Attachment)
 def create_email(recipient):
     msg = EmailMessage()
     msg['Subject'] = MESSAGE_SUBJECT
     msg['From'] = EMAIL_ADDRESS
     msg['To'] = recipient['email']
     salutation = greating(recipient['gender'],recipient['rh'],recipient['rh_name'])
-    # f'de {recipient['company_name']}' if recipient['company_name'] else 'de votre entreprise'
     msg.set_content(message(salutation,companyName(recipient['company_name'])))
+    string2pdf(letter(salutation,companyName(recipient['company_name'])))
     add_attachment(CV_PATH,msg)
     add_attachment(LETTER_PATH,msg)
     return msg
