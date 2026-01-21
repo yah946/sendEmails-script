@@ -70,17 +70,16 @@ Contient les adresses e-mails des destinataires ainsi que leurs informations per
 |-------|------------|
 | `email` | Adresse e-mail du destinataire |
 | `gender` | `0` = neutre, `1` = homme, `2` = femme |
-| `rh` | `0` = pas de RH, `1` = RH connu |
-| `rh_name` | Nom du RH si `rh = 1` |
+| `rh_name` | Nom du RH si exist |
 
 ### Exemple de `emails.csv` (comma-separated value)
 
 ```csv
-email,gender,rh,rh_name
-othman@gmail.com,1,1,Othman
-companyX@gmail.com,0,0,
-companyY@gmail.com,0,0,
-khadija@gmail.com,2,1,Khadija
+email,companyName,gender,rh,rh_name
+othman@gmail.com,,1,1,Othman
+companyX@gmail.com,ComanyX,0,0,
+companyY@gmail.com,ComanyY,0,0,
+khadija@gmail.com,ComanyZ,2,1,Khadija
 ```
 ## Limitations d'envoi
 
@@ -103,4 +102,5 @@ khadija@gmail.com,2,1,Khadija
 
 ```bash
 python main.py
+
 ```
