@@ -6,20 +6,15 @@ from dotenv import load_dotenv
 from pypdf import PdfReader
 import pandas as pd
 import subprocess
+import pyfiglet
 import smtplib
 import time
 import sys
 import os
-# Auto-install libraries
-required_packages = ['pandas', 'python-dotenv', 'PyPDF2','fpdf']
-for package in required_packages:
-    try:
-        __import__(package)
-    except ImportError:
-        print(f"Installing {package}...")
-        subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+# name of script
+print(pyfiglet.figlet_format("sendEmail"))
 # Loading variables from a .env file
-load_dotenv()  
+load_dotenv()
 EMAIL_ADDRESS = os.getenv('EMAIL_ADDRESS')
 EMAIL_PASSWORD = os.getenv('EMAIL_PASSWORD')
 CV_NAME = os.getenv('CV_FILE_NAME')
@@ -29,7 +24,7 @@ LETTER_PATH = os.path.join('Attachment',LETTER_NAME)
 # Reading CSV file
 dataFrame = pd.read_csv('Attachment/emails.csv')
 # Create a unique greating
-def greating(gender,rh,rh_name):
+def greating(gender,rh_name):
     if gender == 1:
         base = "Monsieur"
     elif gender == 2:
@@ -41,7 +36,7 @@ def greating(gender,rh,rh_name):
     return f"{base},"
 # Add Name of Company in the email and motivation letter
 def companyName(name):
-    if(name):
+    if not pd.isna(name):
         name = name.lower()
         if(name[0]=='a' or
         name[0]=='o' or
@@ -64,25 +59,23 @@ def create_email(recipient):
     msg['Subject'] = MESSAGE_SUBJECT
     msg['From'] = EMAIL_ADDRESS
     msg['To'] = recipient['email']
-    salutation = greating(recipient['gender'],recipient['rh'],recipient['rh_name'])
+    salutation = greating(recipient['gender'],recipient['rh_name'])
     msg.set_content(message(salutation,companyName(recipient['company_name'])))
     string2pdf(letter(salutation,companyName(recipient['company_name'])))
     add_attachment(CV_PATH,msg)
     add_attachment(LETTER_PATH,msg)
     return msg
-# Check the existence of the CV and motivation letter in PDF format
-paths = {'CV':CV_PATH,'Letter':LETTER_PATH}
-for label,path in paths.items():
-    try:
-        PdfReader(path)
-    except PdfReadError:
-        print(f"invalid {label} file")
-        exit()
-    except FileNotFoundError:
-        print(f"{label} file not found")
-        exit()
-    else:
-        pass
+# Check the existence of CV in PDF format
+try:
+    PdfReader(CV_PATH)
+except PdfReadError:
+    print(f"invalid Cv file")
+    exit()
+except FileNotFoundError:
+    print(f"Cv file not found")
+    exit()
+else:
+    pass
 # Sending Emails...
 with smtplib.SMTP_SSL('smtp.gmail.com',465) as smtp:
     smtp.login(EMAIL_ADDRESS,EMAIL_PASSWORD)
