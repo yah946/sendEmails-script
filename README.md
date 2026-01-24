@@ -14,8 +14,17 @@ Cet outil permet d'envoyer automatiquement des candidatures (CV et lettre de mot
     1. Connectez-vous à votre compte Google.  
     2. Allez dans `Compte Google > Sécurité > Mots de passe des applications`.  
     3. Créez un mot de passe pour **Mail** et **Windows / Mac**.  
-    4. Copiez ce mot de passe pour le mettre dans le fichier `.env`.  
+    4. Copiez ce mot de passe pour le mettre dans le fichier `.env`.
+---
 
+## Installation
+
+```
+git clone https://github.com/yah946/sendEmails-script.git
+pip install -r requirements.txt
+python main.py
+
+```
 ---
 
 ## Configuration
@@ -104,3 +113,4 @@ khadija@gmail.com,ComanyZ,2,1,Khadija
 python main.py
 
 ```
+
