@@ -6,13 +6,22 @@ from dotenv import load_dotenv
 from pypdf import PdfReader
 import pandas as pd
 import subprocess
+import itertools
 import pyfiglet
 import smtplib
 import time
 import sys
 import os
+# Progress Bar
+def spinner(duration=5):
+    spinner = itertools.cycle(["|", "/", "-", "\\"])
+    start = time.time()
+    while time.time() - start < duration:
+        sys.stdout.write("\r" + next(spinner) + " Wait a moment...\n")
+        sys.stdout.flush()
+        time.sleep(0.2)
 # name of script
-print(pyfiglet.figlet_format("sendEmail"))
+print(pyfiglet.figlet_format("sendEmails"))
 # Loading variables from a .env file
 load_dotenv()
 EMAIL_ADDRESS = os.getenv('EMAIL_ADDRESS')
@@ -77,10 +86,12 @@ except FileNotFoundError:
 else:
     pass
 # Sending Emails...
+total = len(dataFrame)
 with smtplib.SMTP_SSL('smtp.gmail.com',465) as smtp:
     smtp.login(EMAIL_ADDRESS,EMAIL_PASSWORD)
-    for _,row in dataFrame.iterrows():
+    for i,row in dataFrame.iterrows():
         smtp.send_message(create_email(row))
         print('Message has been sent to:',row['email'])
-        time.sleep(180)
+        if i + 1<total:
+            spinner(180)
 print("Bye")
