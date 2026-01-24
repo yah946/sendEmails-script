@@ -21,6 +21,7 @@ Cet outil permet d'envoyer automatiquement des candidatures (CV et lettre de mot
 
 ```
 git clone https://github.com/yah946/sendEmails-script.git
+cd sendEmails-script
 pip install -r requirements.txt
 python main.py
 
@@ -113,4 +114,5 @@ khadija@gmail.com,ComanyZ,2,1,Khadija
 python main.py
 
 ```
+
 
